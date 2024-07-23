@@ -1,3 +1,4 @@
+import os
 import pathlib
 import uuid
 
@@ -39,12 +40,10 @@ class Actor(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-def movie_image_path(instance: "Movie", filename: str) -> pathlib.Path:
-    filename = (
-        f"{slugify(instance.title)}-{uuid.uuid4()}"
-        + pathlib.Path(filename).suffix
-    )
-    return pathlib.Path("upload/image") / pathlib.Path(filename)
+def movie_image_path(instance: "Movie", filename: str):
+    extension = pathlib.Path(filename).suffix
+    new_filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+    return os.path.join("upload", "image", new_filename)
 
 
 class Movie(models.Model):
